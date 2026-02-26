@@ -28,7 +28,129 @@ notedlinks:
     link: "https://cra-proto.github.io/test-styles/index.html"
 ---
 
-[object NodeList]<div class="container">
+<style>
+div.hidden-action {
+         transform: scaleX(0);
+         overflow: hidden;
+         display: none;
+         }
+         div.visible-action {
+         transform: scaleX(1);
+         display: visible;
+         }
+         /*Checkbox/Fieldflow radio input sizing,positioning*/
+         .checkbox-zebra > li:nth-child(2n+1) {
+         background-color: #f5f5f5;
+         margin-left: -50px;
+         padding-top: 10px;
+         padding-bottom: 15px;
+         padding-left: 50px;
+         }
+         .checkbox-zebra [role="checkbox"]::before {
+         background-color: #fff;
+         }
+         .std-blt {
+         font-size: 20px;
+         line-height: 1.65em;
+         }
+         .std-blt {
+         list-style-type: disc;
+         }
+         .std-blt li label {
+         display: block;
+         padding-left: 0px;
+         }
+         /********
+         ********
+         ** New checklist example
+         ** May 15, 2020
+         ** Replacing checkkboxes with clickable divs that convey a sense of success to the user
+         ********
+         ********/
+         /* One input per line */
+         .provisional [role="checkbox"] { /* (0,2,0) */
+         cursor: pointer;
+         display: inline-block;
+         padding-left: 15px;
+         position: relative;
+         }
+         .provisional [role="checkbox"]::before,
+         .provisional [role="checkbox"]::after { /* (0,2,1) */
+         content: "";
+         left: 0;
+         position: absolute;
+         top: 0;
+         transform: translate(-100%, 0%);
+         }
+         .provisional .wb-checklist.wb-checklist-sm { /* (0,3,0) */
+         font-size: 20px;
+         }
+         /* the basic, unchecked style */
+         .provisional [role="checkbox"]::before { /* (0,2,1) */
+         border: 4px solid #fff;
+         box-shadow: 0 0 0 2px #000;
+         display: inline-block;
+         height: 36px;
+         width: 36px;
+         }
+         .provisional .wb-checklist-sm [role="checkbox"]::before { /* (0,3,1) */
+         border-width: 3px;
+         height: 24px;
+         transform: translate(-100%, 20%);
+         width: 24px;
+         }
+         /* hover styling */
+         .provisional [role="checkbox"][aria-checked="false"]:hover::before { /* (0,3,1) */
+         background-image: linear-gradient(to bottom, hsl(10, 0%, 90%), hsl(10, 0%, 100%) 50%);
+         }
+         /* focus styling */
+         .provisional [role="checkbox"]:focus { /* (0,3,0) */
+         outline: none;
+         }
+         .provisional [role="checkbox"]:focus::before { /* (0,3,2) */
+         box-shadow: 0 0 0 2px #000, 0 0 8px 4px rgb(59, 153, 252);
+         }
+         /* the checked style using the [aria-checked='true'] pseudo class and aria-checked=true attribute */
+         .provisional [role="checkbox"][aria-checked="true"]::before { /* (0,3,1) */
+         background-color: #318000;
+         border: none;
+         }
+         .provisional [role="checkbox"][aria-checked="true"]::after { /* (0,3,1) */
+         border-color: white;
+         border-style: solid;
+         border-width: 0 5px 5px 0;
+         display: inline-block;
+         height: 26px;
+         width: 13px;
+         transform: translate(-185%, 10%) rotate(45deg);
+         }
+         .provisional .wb-checklist-sm [role="checkbox"][aria-checked="true"]::after { /* (0,3,1) */
+         border-width: 0 4px 4px 0;
+         height: 16px;
+         width: 9px;
+         transform: translate(-185%, 40%) rotate(45deg);
+         }
+@charset "utf-8";      
+/*Fix checkboxes in zebra list*/
+.gc-chckbxrdio>li>input[type=checkbox]+label::before {
+    margin-left: -20px;
+    margin-top: 10px;
+}
+.gc-chckbxrdio>li>input[type=checkbox]+label::after {
+    margin-left: -20px;
+    margin-top: 10px;
+}
+.gc-chckbxrdio>li:nth-child(2n+1)>input[type=checkbox]+label::before {
+    margin-left: 30px;
+    margin-top: 20px;
+    background-color: #fff;
+}
+.gc-chckbxrdio>li:nth-child(2n+1)>input[type=checkbox]+label::after {
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+</style><div class="container">
     <nav class="provisional gc-subway">
         <h1>Canada child benefit (CCB)</h1>
         <ul>
@@ -202,4 +324,38 @@ notedlinks:
         </ul>
     </nav>
 </div>
-[object NodeList]
+<script>_satellite.pageBottom();</script>
+<script>
+    "use strict";
+    
+    let updateChkbx = function(chkbxGroup, chkbxChecked, defaultID, validID, invalidID) { 
+        if (chkbxChecked.length === 0) {
+            $("#" + invalidID).addClass("hidden").removeClass("visible");
+            $("#" + validID).addClass("hidden").removeClass("visible");
+            $("#" + defaultID).removeClass("hidden").addClass("visible");
+        } else if (chkbxGroup.length === chkbxChecked.length) {
+            $("#" + defaultID).addClass("hidden").removeClass("visible");
+            $("#" + invalidID).addClass("hidden").removeClass("visible");
+            $("#" + validID).removeClass("hidden").addClass("visible");
+        } else {
+            $("#" + defaultID).addClass("hidden").removeClass("visible");
+            $("#" + validID).addClass("hidden").removeClass("visible");
+            $("#" + invalidID).removeClass("hidden").addClass("visible");
+        }
+    },
+    updateChkbxList = function () {
+        updateChkbx($(":input[type=checkbox][name=action-checkbox]"), $(":input[type=checkbox][name=action-checkbox]:checked"), "action-all-default-msg", "action-all-qualify-msg", "action-all-not-qualify-msg");
+    }, 
+    updatePartChkbxList = function () {
+        updateChkbx($(":input[type=checkbox][name=action-checkbox][value=true]"), $(":input[type=checkbox][name=action-checkbox][value=true]:checked"), "action-default-msg", "action-qualify-msg", "action-not-qualify-msg");
+    };
+    
+    window.onload = function () {
+        updateChkbxList();
+        updatePartChkbxList();
+    }
+
+    $(":input[type=checkbox][name=action-checkbox]").change(updateChkbxList);
+    $(":input[type=checkbox][name=action-checkbox][value=true]").change(updatePartChkbxList);
+
+</script>
